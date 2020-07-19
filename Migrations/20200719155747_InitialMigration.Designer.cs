@@ -9,8 +9,8 @@ using MvcMovie;
 namespace MvcMovie.Migrations
 {
     [DbContext(typeof(MvcMovieContext))]
-    [Migration("20200718143055_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200719155747_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,16 +25,25 @@ namespace MvcMovie.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Genre")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(30);
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Rating")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(5);
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(60);
 
                     b.HasKey("Id");
 

@@ -8,17 +8,27 @@ namespace MvcMovie.Models
     {
         public int Id { get; set; }
 
+        [Required]
+        [StringLength(60, MinimumLength=3)]
         public string Title { get; set; }
 
+        [Required]
+        [StringLength(30)]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z\s]*$")]
         public string Genre { get; set; }
         
         [Column(TypeName = "decimal(18,2)")]
+        [DataType(DataType.Currency)]
+        [Range(1, 1000)]
         public decimal Price { get; set; }
 
         [Display(Name = "Release Date")]
         [DataType(DataType.Date)]
         public DateTime ReleaseDate { get; set; }
 
+        [Required]
+        [StringLength(5)]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
         public string Rating { get; set; }
     }
     
