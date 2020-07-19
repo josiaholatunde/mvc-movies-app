@@ -27,7 +27,6 @@ namespace MvcMovie
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
             services.AddDbContext<MvcMovieContext>(options => {
                 string connectionString = Configuration.GetConnectionString("MvcMovieContext");
                 if (Environment.IsDevelopment()) options.UseSqlite(connectionString);
