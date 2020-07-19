@@ -20,14 +20,27 @@ namespace MvcMovie.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string movieGenre, string searchString)
         {
-            var movies = from m in _context.Movies 
+            IQueryable<string> genreQuery = from m in _context.Movies
+                        orderby m.Genre 
+                        select m.Genre;
+            var movies = from m in _context.Movies
                         select m;
+
             if (!String.IsNullOrEmpty(searchString)) {
-                movies = movies.Where(movie => movie.Title.Contains(searchString));
+                movies = movies.Where(movie => movie.Title.ToLower().Contains(searchString));
             }
-            return View(await movies.ToListAsync());
+            if (!String.IsNullOrEmpty(movieGenre))
+            {
+                movies = movies.Where(movie => movie.Genre == movieGenre);
+            }
+            var movieGenreVM = new MovieViewGenreModel {
+                Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Movies = await  movies.ToListAsync(),
+
+            };
+            return View(movieGenreVM);
         }
 
         // GET: Movies/Details/5
@@ -59,7 +72,7 @@ namespace MvcMovie.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Genre,Price,ReleaseDate")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,Title,Genre,Price,ReleaseDate, Rating")] Movie movie)
         {
             if (ModelState.IsValid)
             {
